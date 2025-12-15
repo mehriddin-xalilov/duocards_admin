@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@import "../components/Editor/styles/_variables.scss";
+@import "../components/Editor/styles/_keyframe-animations.scss";
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+@config "../../tailwind.config.js";
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE va Edge */
+    scrollbar-width: none; /* Firefox */
+}

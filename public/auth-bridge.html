@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Bridge</title>
+</head>
+<body style="display:none;">
+    <script>
+        let lastToken = null;
+        
+        setInterval(() => {
+            try {
+                const userStore = localStorage.getItem('user');
+                let currentToken = null;
+                
+                if (userStore && userStore !== 'null') {
+                    try {
+                        const userData = JSON.parse(userStore);
+                        if (userData.state?.token && userData.state?.user) {
+                            currentToken = userData.state.token;
+                            
+                            if (currentToken !== lastToken) {
+                                window.parent.postMessage({
+                                    type: 'AUTH_LOGIN',
+                                    payload: {
+                                        token: userData.state.token,
+                                        user: userData.state.user
+                                    }
+                                }, '*');
+                            }
+                        }
+                    } catch (e) {
+                        currentToken = null;
+                    }
+                } else {
+                    currentToken = null;
+                }
+                
+                if (lastToken && !currentToken) {
+                    window.parent.postMessage({ type: 'AUTH_LOGOUT' }, '*');
+                }
+                
+                lastToken = currentToken;
+            } catch (error) {}
+        }, 1000);
+    </script>
+</body>
+</html>
+
