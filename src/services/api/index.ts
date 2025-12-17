@@ -10,8 +10,7 @@ function getToken(): string | null {
 }
 
 export const apiInstance: AxiosInstance = axios.create({
-    // baseURL: import.meta.env.VITE_API_BASE_URL,
-    baseURL: "https://d171e95a4898.ngrok-free.app/api/v1/admin",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     timeout: 10000,
 });
 
