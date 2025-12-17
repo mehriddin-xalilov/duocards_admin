@@ -46,7 +46,7 @@ export type ProfileType = {
 
 export const userApi = {
     getUsers: async <T>(params: GetParams) => {
-        const response: ResponseDataType<T> = await apiInstance.get("/user", {
+        const response: ResponseDataType<T> = await apiInstance.get("/users", {
             params,
         });
 
@@ -61,7 +61,7 @@ export const userApi = {
         return response;
     },
     getUser: async <T>(id: number) => {
-        const response: ResponseDataType<T> = await apiInstance.get(`/user/${id}`, {
+        const response: ResponseDataType<T> = await apiInstance.get(`/users/${id}`, {
             params: {
                 include: "photo",
             },
@@ -71,13 +71,13 @@ export const userApi = {
     },
 
     createUser: async <T>(data: T) => {
-        const response: ResponseDataType<T> = await apiInstance.post("/user", data);
+        const response: ResponseDataType<T> = await apiInstance.post("/users", data);
 
         return response;
     },
 
     updateUser: async <T>(id: number, data: T) => {
-        const response: ResponseDataType<T> = await apiInstance.put(`/user/${id}`, data);
+        const response: ResponseDataType<T> = await apiInstance.put(`/users/${id}`, data);
 
         return response;
     },
@@ -95,7 +95,7 @@ export const userApi = {
     },
 
     deleteUser: async <T>(id: number) => {
-        const response: ResponseDataType<T> = await apiInstance.delete(`/user/${id}`);
+        const response: ResponseDataType<T> = await apiInstance.delete(`/users/${id}`);
 
         return response;
     },

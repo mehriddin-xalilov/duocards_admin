@@ -10,7 +10,7 @@ export const authApi = {
         return apiInstance.post("/auth/login", data);
     },
     logout: () => {
-        return apiInstance.post("/auth/logout");
+        return apiInstance.post("/users/logout");
     },
 
     confirm: (phone: number, code: string) => {
