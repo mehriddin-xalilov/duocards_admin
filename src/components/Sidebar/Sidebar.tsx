@@ -43,7 +43,7 @@ export const Sidebar = () => {
                 </Button>
             </div>
 
-            <div className="flex flex-col gap-2 mt-15 overflow-y-scroll h-[75vh]">
+            <div className="flex flex-col gap-2 mt-15">
                 {filteredMenu.map((item) =>
                     item.children ? (
                         <SidebarAccordionItem key={item.label} item={item} sidebarIsOpen={isOpen} />

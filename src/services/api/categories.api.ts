@@ -2,19 +2,11 @@ import { apiInstance } from "@/services/api";
 import { GetParams, ResponseDataType } from "@/services/api/types";
 
 export type CategoriesItemType = {
-    name: {
-        uz: string;
-        oz: string;
-        ru: string;
-        en: string;
-    };
-    parent_id: number;
-    slug: string;
-    main: number;
-    status: number;
-    sort: number;
-    is_home: number;
+    name: string;
+    parent_id: number | null;
     id: number;
+    icon?: any;
+    children?: CategoriesItemType[];
 };
 
 export const CategoriesApi = {

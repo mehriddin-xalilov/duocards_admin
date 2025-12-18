@@ -32,10 +32,10 @@ export const CategoriesModal = (props: CategoriesModalProps) => {
     const text = isChild
         ? "Subkategoriya yaratish"
         : categories
-          ? "Kategoriya ni o'zgartirish"
-          : "Kategoriya yaratish";
+            ? "Kategoriya ni o'zgartirish"
+            : "Kategoriya yaratish";
 
-    const categoryName = categories?.name?.uz;
+    const categoryName = categories?.name;
 
     return (
         <Modal
@@ -46,15 +46,9 @@ export const CategoriesModal = (props: CategoriesModalProps) => {
             <Form
                 fetchFunction={(values) => {
                     const payload = {
-                        slug: values.slug,
-                        name: {
-                            uz: values.name_uz,
-                            ru: values.name_ru,
-                            // oz: values.name_oz,
-                            // en: values.name_en,
-                        },
+                        name: values.name,
                         ...(values.parent_id && { parent_id: values.parent_id }),
-                        status: values.status ? 1 : 0,
+                        ...(values.icon && { icon: values.icon }),
                     };
 
                     if (categories && !isChild) {
@@ -65,34 +59,12 @@ export const CategoriesModal = (props: CategoriesModalProps) => {
                 }}
                 fields={[
                     {
-                        name: "name_uz",
+                        name: "name",
                         validationType: "string",
                         isRequired: true,
-                        defaultValue: isChild ? "" : (categories?.name.uz ?? ""),
-                        errorMessage: "Iltimos sarlavha (UZ) nomini kiriting",
+                        defaultValue: isChild ? "" : (categories?.name ?? ""),
+                        errorMessage: "Iltimos sarlavha nomini kiriting",
                     },
-                    // {
-                    //     name: "name_oz",
-                    //     validationType: "string",
-                    //     isRequired: true,
-                    //     defaultValue: isChild ? "" : (categories?.name?.oz ?? ""),
-                    //     errorMessage: "Iltimos sarlavha (OZ) nomini kiriting",
-                    // },
-                    {
-                        name: "name_ru",
-                        validationType: "string",
-                        isRequired: true,
-                        defaultValue: isChild ? "" : (categories?.name?.ru ?? ""),
-                        errorMessage: "Iltimos sarlavha (RU) nomini kiriting",
-                    },
-
-                    // {
-                    //     name: "name_en",
-                    //     validationType: "string",
-                    //     isRequired: true,
-                    //     defaultValue: isChild ? "" : (categories?.name?.en ?? ""),
-                    //     errorMessage: "Iltimos sarlavha (EN) nomini kiriting",
-                    // },
                     {
                         name: "parent_id",
                         validationType: "any",
@@ -100,22 +72,13 @@ export const CategoriesModal = (props: CategoriesModalProps) => {
                             isChild && categories
                                 ? categories.id
                                 : !isChild && categories?.parent_id
-                                  ? categories?.parent_id
-                                  : "",
+                                    ? categories?.parent_id
+                                    : "",
                     },
                     {
-                        name: "slug",
-                        validationType: "string",
-                        isRequired: true,
-                        defaultValue: isChild ? "" : (categories?.slug ?? ""),
-                        errorMessage: "Iltimos slugni kiriting",
-                    },
-
-                    {
-                        name: "status",
-                        validationType: "boolean",
-                        defaultValue: isChild ? false : (Boolean(categories?.status) ?? false),
-                        onSubmit: (value) => (value ? 1 : 0),
+                        name: "icon",
+                        validationType: "any",
+                        defaultValue: isChild ? "" : (categories?.icon ?? ""),
                     },
                 ]}
                 onSuccess={onSuccess}
@@ -124,42 +87,18 @@ export const CategoriesModal = (props: CategoriesModalProps) => {
                     return (
                         <div className="flex flex-col gap-4">
                             <FormFields.Input
-                                label="Sarlavha (UZ)"
-                                name="name_uz"
+                                label="Sarlavha"
+                                name="name"
                                 radius="sm"
                                 type="text"
                                 {...formRestProps}
                             />
-                            {/* <FormFields.Input
-                                label="Sarlavha (OZ)"
-                                name="name_oz"
-                                radius="sm"
-                                type="text"
+                            <FormFields.FileUpload
                                 {...formRestProps}
-                            /> */}
-                            <FormFields.Input
-                                label="Sarlavha (RU)"
-                                name="name_ru"
-                                radius="sm"
-                                type="text"
-                                {...formRestProps}
+                                isOnly="img"
+                                label="Ikonka yuklash"
+                                name="icon"
                             />
-                            {/* <FormFields.Input
-                                label="Sarlavha (EN)"
-                                name="name_en"
-                                radius="sm"
-                                type="text"
-                                {...formRestProps}
-                            /> */}
-                            <FormFields.Input
-                                label="Slug"
-                                name="slug"
-                                radius="sm"
-                                type="text"
-                                {...formRestProps}
-                            />
-
-                            <FormFields.Switch label="Status" name="status" {...formRestProps} />
                             <Button color="primary" isLoading={isLoading} radius="sm" type="submit">
                                 {categories && !isChild ? "O'zgartirish" : "Yaratish"}
                             </Button>

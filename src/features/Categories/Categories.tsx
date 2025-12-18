@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import { addToast, Button, Switch } from "@heroui/react";
+import { addToast, Button } from "@heroui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearch } from "@tanstack/react-router";
 import { CellValueChangedEvent, ColDef, ICellRendererParams } from "ag-grid-community";
@@ -17,7 +17,6 @@ export const Categories = () => {
     const [CategoriesModalData, setCategoriesModal] = useState<{
         open: boolean;
         categories?: CategoriesItemType | null;
-        lang_hash?: string;
         isChild?: boolean;
     }>({ open: false, categories: null, isChild: false });
 
@@ -63,96 +62,12 @@ export const Categories = () => {
 
     const colDefs = useMemo<ColDef[]>(
         () => [
-            // {
-            //     field: "name.oz",
-            //     headerName: "Sarlavha (OZ)",
-            //     flex: 1,
-            //     valueGetter: (params) => params.data?.name?.oz ?? "",
-            //     valueSetter: (params) => {
-            //         params.data.name.oz = params.newValue;
-            //         return true;
-            //     },
-            // },
-            {
-                field: "name.ru",
-                headerName: "Sarlavha (RU)",
-                flex: 1,
-                valueGetter: (params) => params.data?.name?.ru ?? "",
-                valueSetter: (params) => {
-                    params.data.name.ru = params.newValue;
-                    return true;
-                },
-            },
-            // {
-            //     field: "name.en",
-            //     headerName: "Sarlavha (EN)",
-            //     flex: 1,
-            //     valueGetter: (params) => params.data?.name?.en ?? "",
-            //     valueSetter: (params) => {
-            //         params.data.name.en = params.newValue;
-            //         return true;
-            //     },
-            // },
-
-            {
-                field: "slug",
-                headerName: "Slug",
-                flex: 1,
-            },
-            {
-                field: "status",
-                headerName: "Status",
-                width: 100,
-                editable: false,
-                cellRenderer: (params: ICellRendererParams) => {
-                    return (
-                        <div className="h-full flex items-center">
-                            <Switch
-                                defaultSelected={!!params.value}
-                                name={`status-${params.data.id}`}
-                                size="sm"
-                                onChange={(e) => {
-                                    const newStatus = e.target.checked ? 1 : 0;
-
-                                    CategoriesApi.updateCategories(params.data.id, {
-                                        status: newStatus,
-                                    }).then(() => {
-                                        queryClient.invalidateQueries({ queryKey: ["categories"] });
-                                    });
-                                }}
-                            />
-                        </div>
-                    );
-                },
-            },
             {
                 field: "action",
                 headerName: "Action",
                 cellRenderer: (params: ICellRendererParams) => {
-                    // const isRoot = !params.data.parent_id;
-
                     return (
                         <div className="h-full flex items-center gap-2">
-                            {/* {isRoot && (
-                                <Button
-                                    isIconOnly
-                                    color="primary"
-                                    size="sm"
-                                    variant="light"
-                                    onPress={() =>
-                                        setCategoriesModal({
-                                            open: true,
-                                            isChild: true,
-                                            categories: params.data,
-                                        })
-                                    }
-                                >
-                                    <Tooltip content="Sub kategoriya yaratish">
-                                        <Plus size={16} />
-                                    </Tooltip>
-                                </Button>
-                            )} */}
-
                             <Button
                                 isIconOnly
                                 color="primary"
@@ -183,8 +98,8 @@ export const Categories = () => {
 
     const autoGroupColumnDef = useMemo<ColDef>(() => {
         return {
-            field: "name.uz",
-            headerName: "Sarlavha (UZ)",
+            field: "name",
+            headerName: "Fan nomi",
             cellRenderer: "agGroupCellRenderer",
         };
     }, []);
@@ -228,7 +143,7 @@ export const Categories = () => {
                     fetchData={CategoriesApi.getCategories}
                     params={{
                         per_page: 20,
-                        // sort: "-sort",
+                        sort: "-id",
                         title: title,
                     }}
                     queryKey="categories"
