@@ -14,8 +14,10 @@ import DotsIconSVG from "@/assets/icons/dots.svg?react";
 import { ProfileModal } from "./ProfileModal";
 
 import { useAuthHandler } from "@/hooks/useAuth";
+import { useUser } from "@/hooks/useUser";
 import { authApi } from "@/services/api/auth.api";
 import { userApi } from "@/services/api/user.api";
+import { userStore } from "@/store/user.store";
 
 type ProfileDropdownProps = {
     sidebarIsOpen: boolean;
@@ -23,7 +25,8 @@ type ProfileDropdownProps = {
 
 export const ProfileDropdown = (props: ProfileDropdownProps) => {
     const { sidebarIsOpen } = props;
-    const [user, setUser] = useState<any>(null);
+    const { user } = useUser();
+    const { setUser } = userStore();
 
     const { logoutHandler } = useAuthHandler();
     const [userModal, setUserModal] = useState<{
@@ -40,7 +43,9 @@ export const ProfileDropdown = (props: ProfileDropdownProps) => {
             try {
                 const response = await userApi.getMe<any>();
 
-                setUser(response.data.user);
+                // Sync global store with fresh user data (including permissions)
+                // We keep the existing token if getMe doesn't return one, or use the one from response
+                setUser(response.data.user, response.data.token || null);
             } catch (err) {
                 console.error("Failed to fetch user", err);
             }
@@ -81,7 +86,7 @@ export const ProfileDropdown = (props: ProfileDropdownProps) => {
                                     avatarProps={{
                                         src: user?.photo?.thumbnails?.normal?.src || "",
                                     }}
-                                    description={`Rol: ${user?.user_role?.role}`}
+                                    description={`Rol: ${user?.roles?.[0]?.name ?? user?.user_role?.role ?? ""}`}
                                     name={user?.name ?? ""}
                                 />
                             </div>

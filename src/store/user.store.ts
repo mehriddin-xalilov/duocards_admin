@@ -9,13 +9,25 @@ export interface UserType {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-    user_role: {
-        id: number;
+    user_role?: {
         role: string;
-        user_id: number;
-        created_at: string;
-        updated_at: string;
     };
+    roles: {
+        id: number;
+        name: string;
+    }[];
+    photo?: {
+        id: number;
+        thumbnails: {
+            normal: {
+                src: string;
+            };
+            small: {
+                src: string;
+            };
+        };
+    };
+    permissions: string[];
 }
 
 interface UserStore {

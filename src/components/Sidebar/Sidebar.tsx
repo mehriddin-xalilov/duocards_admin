@@ -11,17 +11,23 @@ import LogoIconSVG from "@/assets/icons/logo.svg?react";
 import SwitcherIconSVG from "@/assets/icons/switcher.svg?react";
 
 import { useUser } from "@/hooks/useUser";
+import { usePermission } from "@/hooks/usePermission";
 
 export const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(true);
     const { user } = useUser();
-    const role = user?.user_role.role;
+    const { can, hasRole } = usePermission();
 
     const handleToggle = () => {
         setIsOpen((prev) => !prev);
     };
 
-    const filteredMenu = sidebarMenu.filter((item) => item.roles.includes(role || ""));
+    const filteredMenu = sidebarMenu.filter((item) => {
+        const hasRequiredRole = item.roles.length === 0 || hasRole(item.roles);
+        const hasRequiredPermission = !item.permissions || item.permissions.some((p) => can(p));
+
+        return hasRequiredRole && hasRequiredPermission;
+    });
 
     return (
         <div

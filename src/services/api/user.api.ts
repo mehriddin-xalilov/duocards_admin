@@ -26,6 +26,7 @@ export type UserType = {
     id: number;
     lang_hash?: string;
     user_role: { role: String };
+    roles?: { id: number; name: string; guard_name: string }[];
 };
 
 export type ProfileType = {

@@ -13,6 +13,7 @@ import { Route as MainRouteRouteImport } from './routes/_main/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as MainIndexRouteImport } from './routes/_main/index'
 import { Route as MainUserRouteImport } from './routes/_main/user'
+import { Route as MainRolesRouteImport } from './routes/_main/roles'
 import { Route as MainMediaRouteImport } from './routes/_main/media'
 import { Route as MainCategoriesRouteImport } from './routes/_main/categories'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
@@ -34,6 +35,11 @@ const MainIndexRoute = MainIndexRouteImport.update({
 const MainUserRoute = MainUserRouteImport.update({
   id: '/user',
   path: '/user',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+const MainRolesRoute = MainRolesRouteImport.update({
+  id: '/roles',
+  path: '/roles',
   getParentRoute: () => MainRouteRoute,
 } as any)
 const MainMediaRoute = MainMediaRouteImport.update({
@@ -62,6 +68,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/categories': typeof MainCategoriesRoute
   '/media': typeof MainMediaRoute
+  '/roles': typeof MainRolesRoute
   '/user': typeof MainUserRoute
   '/': typeof MainIndexRoute
 }
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/categories': typeof MainCategoriesRoute
   '/media': typeof MainMediaRoute
+  '/roles': typeof MainRolesRoute
   '/user': typeof MainUserRoute
   '/': typeof MainIndexRoute
 }
@@ -81,14 +89,22 @@ export interface FileRoutesById {
   '/_auth/login': typeof AuthLoginRoute
   '/_main/categories': typeof MainCategoriesRoute
   '/_main/media': typeof MainMediaRoute
+  '/_main/roles': typeof MainRolesRoute
   '/_main/user': typeof MainUserRoute
   '/_main/': typeof MainIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/auth' | '/login' | '/categories' | '/media' | '/user' | '/'
+  fullPaths:
+    | '/auth'
+    | '/login'
+    | '/categories'
+    | '/media'
+    | '/roles'
+    | '/user'
+    | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/login' | '/categories' | '/media' | '/user' | '/'
+  to: '/auth' | '/login' | '/categories' | '/media' | '/roles' | '/user' | '/'
   id:
     | '__root__'
     | '/_auth'
@@ -97,6 +113,7 @@ export interface FileRouteTypes {
     | '/_auth/login'
     | '/_main/categories'
     | '/_main/media'
+    | '/_main/roles'
     | '/_main/user'
     | '/_main/'
   fileRoutesById: FileRoutesById
@@ -134,6 +151,13 @@ declare module '@tanstack/react-router' {
       path: '/user'
       fullPath: '/user'
       preLoaderRoute: typeof MainUserRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/roles': {
+      id: '/_main/roles'
+      path: '/roles'
+      fullPath: '/roles'
+      preLoaderRoute: typeof MainRolesRouteImport
       parentRoute: typeof MainRouteRoute
     }
     '/_main/media': {
@@ -184,6 +208,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 interface MainRouteRouteChildren {
   MainCategoriesRoute: typeof MainCategoriesRoute
   MainMediaRoute: typeof MainMediaRoute
+  MainRolesRoute: typeof MainRolesRoute
   MainUserRoute: typeof MainUserRoute
   MainIndexRoute: typeof MainIndexRoute
 }
@@ -191,6 +216,7 @@ interface MainRouteRouteChildren {
 const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainCategoriesRoute: MainCategoriesRoute,
   MainMediaRoute: MainMediaRoute,
+  MainRolesRoute: MainRolesRoute,
   MainUserRoute: MainUserRoute,
   MainIndexRoute: MainIndexRoute,
 }
